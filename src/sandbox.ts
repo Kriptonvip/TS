@@ -1,101 +1,72 @@
-// если надо вернуть переменную к типу как в javascript, переопределяй тип сколько хочешь.
-let age: any; 
-age = true;
+// type of functions ________________
 
-console.log(age);
+let greet = () => {
+    console.log('Hello, world')
+}
+console.log(typeof(greet));
 
-age = 'hello'
-console.log(age);
+const add = (a:number, b:number, c?: any) => {
+    console.log(a+b);
+    console.log(c);
+}
+add(5,6);
 
-// создаём массив с разными типами данных
-
-let mixed2: any[] = [];
-
-mixed2.push(2);
-mixed2.push('mario')
-mixed2.push(true);
-
-console.log(mixed2)
-
-//создаем  объект с любым типом
-
-let ninja2: {name: any, age: any}
-
-ninja2 = {name: 'yoshi', age: 23}
-
-console.log(ninja2);
-ninja2 = {name: 23, age: '123123'}
-
-console.log(ninja2);
-
-
-
-//arrays
-
-let names = ['luigi','mario','yoshi']; // массив со строками всегда останется массивом со строками
-let eges = [3, 4, 6, 23]; // массив с numbers всегда останется массивом с numbers
-
-//тоже самое касается переменных, единожды получив тип при дикларации, изменить тип данных нельзя. 
-
-// можно явно указывать типе переменной вот так
-
-let book: string;
-
-//let age:number;
-
-let isLoggined: boolean;
-
-// Далее менять тип данных нельзя. 
-
-// обьявление типа переменной как массив строк, c присвоением переменной пустого массива.
-let ninjas: string[] = []
-
-// union type создаем массив с разными типами данных
-
-let mixed: (string|number|boolean)[]=[];
-mixed.push('hello');
-mixed.push(32);
-mixed.push(false)
-
-console.log(mixed);
-
-// с помощью объединения типов union мы можем создавать 
-//переменные с разным типом данных, и они могут менять свой тип данных после объявления
-
-
-let uid: string|number;  
-uid = 'string';
-uid = 33;
-// uid = false не можем так сделать так как boolean не было добавлено в возможные типа данных.
-
-// object
-
-let ninjaObject: object;
-
-ninjaObject = { name: 'yoshi', age: 20};
-
-ninjaObject = [];
-
-// если надо задать переменную только объект, то надо задать схему объекта с конкретными ключами и их типами, 
-//тогда переменная уже не может стать массивом или получить новую переменную которая не была заложена в схему объекта
-let ninjaTwo: {
-name: string,
-age: number,
-beltColour:String
+const minus = (a:number, b:number):number => {
+    return a - b;
 }
 
-
-//names.push('toad');
-//console.log(names);
-// let character = 'luigi';
-// let age = 30;
-// let ibBlackBelt = false;
-
-// // character = 20;
-// character = 'mario'
+let result = minus(19, 8);
 
 
-// const circ = (diameter: number) => {
-//     return diameter * Math.PI;
-// };
-// console.log(circ(33));
+// type aliases type of functions ________________
+
+const logDetails = (uid: string | number, item: string) => {
+    console.log(`${item} has a uid of ${uid}`);
+}
+const greetAgain = (user: {name: string, uid: string | number}) => {
+    console.log(`${user.name} says hello`);
+}
+// Алиасы позволяют присвоить типам аргументов имена. например
+type StringOrNum = string | number;
+// что позволяет сократить и упростить объявление типа параметров.
+// также можно задавать шаблоны типов параметров для объектов
+type ObjNameString = {name: string, uid: StringOrNum}
+
+const logDetails2 = (uid: StringOrNum, item: string) => {
+    console.log(`${item} has a uid of ${uid}`);
+}
+const greetAgain2 = (user: ObjNameString) => {
+    console.log(`${user.name} says hello`);
+}
+
+console.log(logDetails2(12, 'roman'));
+console.log(greetAgain2);
+
+// Functions Signature
+
+//let Hello: Function // Тип у переменной hello функция! 
+// example 1
+ let hello: (a: string, b:string) => void; // задаём шаблон(signature) типизации параметров функции, //void говорит что функция должна возвращать тип данных void.
+ hello = (name: string, greeting: string) => { // типы параметров должны совпадать с заданными в signature
+     console.log(`${name} say ${greeting}`);
+ }
+ // example 2
+ let calc: (a:number, b:number, c:string) => number // => number говорит что функция должна возвращать тип данных number, в другом случае будет ошибка 
+
+ calc = (numOne:number, numTwo:number, action:string) => {
+    
+    if (action === 'add') {
+        return numOne + numTwo;
+    } else {
+        return numTwo - numOne;
+    }
+ }
+// example 3
+
+
+let greetAgainAgain:(obj: {name: string, age: number}) => void;
+
+type person = {name: string, age: number}
+greetAgainAgain = (user: person) => {  // after variable has signature you can use type alias
+ console.log(`${user.name} is ${user.age} years old`)
+}
